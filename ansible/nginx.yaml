@@ -1,0 +1,106 @@
+
+
+---
+- name: Cross-distribution Nginx installation
+  hosts: all
+  become: true
+
+  vars_files:
+    - vars.yaml
+
+  tasks:
+
+## Installation
+    - name: Install NGINX on Debian
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install NGINX on Amazon Linux
+      package:
+        name: nginx
+        state: present
+      when: ansible_distribution == "Amazon"
+
+    - name: Enable and run NGINX
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+
+
+## Check original configuration
+
+    - name: curl for LB; native configuration
+      become: false
+      shell: |
+        curl -s {{ lb_url }} | \
+        elinks -dump -no-numbering -no-references 
+      register: var01
+      args:
+      delegate_to: localhost
+
+
+    - name: output; native configuration
+      debug:
+        msg: "{{ var01.stdout }}"
+
+
+
+## new config; new index.html
+
+    - name: Render and upload config template
+      copy:
+        dest: /var/www/html/index.html
+        mode: '0644'
+        content: |
+          Payt.
+          Welcome !!
+          Host: {{ ansible_hostname }}
+          Time: {{ lookup('pipe', 'date +"%Y-%m-%d %H:%M:%S"') }}
+
+    - name: Modify default Nginx config
+      copy:
+        dest: /etc/nginx/sites-available/default
+        content: |
+          server {
+              listen 80 default_server;
+              listen [::]:80 default_server;
+              root /var/www/html;
+              index index.html;
+              server_name _;
+              location / {
+                  try_files $uri $uri/ =404;
+              }
+          }
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Restart Nginx
+
+    - name: Flush handlers (restart nginx before next task)
+      meta: flush_handlers
+
+## Check modified configuration
+    - name: curl for LB; updated configuration
+      become: false
+      shell: |
+        curl -s {{ lb_url }} | \
+        elinks -dump -no-numbering -no-references 
+      register: var02
+      delegate_to: localhost
+
+    - name: output; modified configuration
+      debug:
+        msg: "{{ var02.stdout }}"
+
+
+##
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: reloaded

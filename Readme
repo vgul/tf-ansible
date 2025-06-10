@@ -1,0 +1,17 @@
+
+Just run
+  bash ./run.sh help
+
+
+TASK:
+  Create a Terraform setup with an AWS loadbalancer and EC2 app server in a private
+  subnet via an autoscaling group. Configure the app server to be reachable through the AWS
+  session manager. Create an ansible setup to install, configure and launch Nginx on the
+  app server.
+  Create a script that creates the app server through Terraform and automatically
+  configures the instance through Ansible using Terraform output such as an IP.
+
+  Create a Ruby script to upload and download files to/from S3 using
+  the https://rubygems.org/gems/aws-sdk-s3 gem. Make sure that files
+  older than 30 days are automatically deleted, but always keep the 10 most up to date files.
+

@@ -1,0 +1,18 @@
+
+
+plugin: amazon.aws.aws_ec2 # aws_ec2 - it needs be present in name of This file
+#regions:
+#  - us-east-1
+
+hostnames:
+  - instance-id
+
+filters:
+  tag:aws:autoscaling:groupName: ["asg-vlad-test-20250610125921857300000002"]
+  #tag:Name: ["jump-host-tf"]
+
+compose:
+  ansible_connection: "'amazon.aws.aws_ssm'"
+  ansible_host: instance-id
+  ansible_aws_ssm_bucket_name: "'442042546099-20250610-125115-ansible-ssm'"
+  ansible_python_interpreter: "'/usr/bin/python3'"
