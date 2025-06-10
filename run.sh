@@ -28,8 +28,8 @@ cat << EOC
 
   bash ./run.sh help  - this help
 
-  bash ./run.sh terraform apply
-  bash ./run.sh terraform apply -var force_ansible=false (disable run ansible)
+  bash ./run.sh terraform apply ## this is idempotent operation as well for both tf/ansible
+  bash ./run.sh terraform apply -var force_ansible=false (disable run ansible part)
                       - create infrastructure as in task specified;
                         both for ansible invokation and ruby s3 script
                         policies scale Up/Down is not created (requirements, criteria, etc

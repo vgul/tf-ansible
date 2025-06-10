@@ -73,7 +73,7 @@ resource "aws_launch_template" "lt" {
   name          = "lt-${var.project}"
   #image_id      = var.ec2_ami
   image_id      = data.aws_ami.debian.id
-  instance_type = "t3.nano"
+  instance_type = var.instance_type
   #key_name      = aws_key_pair.imported.key_name
 
   network_interfaces {

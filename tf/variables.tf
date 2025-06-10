@@ -39,7 +39,7 @@ variable "public_subnet_shift" {
   default = 100
 }
 
-#variable "ec2_ami" {
-#  #default = "ami-04999cd8f2624f834" # amazon linux
-#  default = "ami-03420506796dd6873" # debian
-#}
+variable "instance_type" {
+  default = "t3.micro"
+}
+
