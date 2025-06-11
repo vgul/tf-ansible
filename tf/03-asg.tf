@@ -97,20 +97,20 @@ resource "aws_launch_template" "lt" {
   user_data = base64encode(<<-EOF
     #!/bin/bash
 
-    apt update
-    apt install -y netcat-traditional
+    #apt update
+    #apt install -y netcat-traditional
 
     wget -P /tmp https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb
     dpkg -i /tmp/amazon-ssm-agent.deb
     
-    echo "Webserver's placeholder" > /tmp/index.html
-    while true; do
-      [ ! -f /tmp/index.html ] || [ -d /etc/nginx ] && exit 0
-      {
-        echo -ne "HTTP/1.0 200 OK\r\nContent-Length: $(wc -c </tmp/index.html)\r\n\r\n"
-        cat /tmp/index.html
-      } | nc -l -p 80 >> /dev/null
-    done &
+    #echo "Webserver's placeholder" > /tmp/index.html
+    #while true; do
+    #  [ ! -f /tmp/index.html ] || [ -d /etc/nginx ] && exit 0
+    #  {
+    #    echo -ne "HTTP/1.0 200 OK\r\nContent-Length: $(wc -c </tmp/index.html)\r\n\r\n"
+    #    cat /tmp/index.html
+    #  } | nc -l -p 80 >> /dev/null
+    #done &
 
   EOF
   )
