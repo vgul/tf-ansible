@@ -18,6 +18,8 @@ cat << EOC
   The following variables must be defined:
     AWS_PROFILE 
     AWS_REGION  
+  and set
+    AWS_CONFIG_FILE=/dev/null
 
   bash ./run.sh build - builds a Docker image for all components in this test assignment
                         this ensures a reproducible environment and predictable results
