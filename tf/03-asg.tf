@@ -110,7 +110,7 @@ resource "aws_launch_template" "lt" {
         echo -ne "HTTP/1.0 200 OK\r\nContent-Length: $(wc -c </tmp/index.html)\r\n\r\n"
         cat /tmp/index.html
       } | nc -l -p 80 >> /dev/null
-    done
+    done &
 
   EOF
   )
